@@ -1,9 +1,13 @@
+import { StatusBar, View } from "react-native";
 import Main from "./src/Main";
 
 const App = () => {
 
 	return (
-		<Main/>
+		<>
+			<StatusBar barStyle={"default"}/>
+			<Main/>
+		</>
 	);
 };
 
