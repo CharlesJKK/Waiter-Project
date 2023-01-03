@@ -25,7 +25,7 @@ export default function OrderModal({ visible, order, onClose }:OrderModalProps){
 		document.addEventListener("keydown", handleKeyDown);
 
 		return () => {document.removeEventListener("keydown", handleKeyDown); };
-	}, []);
+	}, [onClose]);
 
 	const total = order.products.reduce((total, {product, quantity}) => {
 		return total + (product.price * quantity);
