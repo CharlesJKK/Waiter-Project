@@ -1,8 +1,10 @@
+import { Order } from "../../types/Order";
 import {Board, OrdersContainer} from "./styles";
 
 interface OrdersBoardProps{
 	icon: string;
 	tittle: string;
+	orders: Order[];
 }
 
 export default function OrdersBoard(props: OrdersBoardProps){
@@ -11,18 +13,18 @@ export default function OrdersBoard(props: OrdersBoardProps){
 			<header>
 				<span>{props.icon}</span>
 				<strong>{props.tittle}</strong>
-				<span>(1)</span>
+				<span>({props.orders.length})</span>
 			</header>
-			<OrdersContainer>
-				<button type="button">
-					<strong>Mesa 2</strong>
-					<span>2 itens</span>
-				</button>
-				<button type="button">
-					<strong>Mesa 2</strong>
-					<span>2 itens</span>
-				</button>
-			</OrdersContainer>
+			{props.orders.length > 0 && (
+				<OrdersContainer>
+					{props.orders.map((order) => (
+						<button type="button" key={order._id}>
+							<strong>Mesa {order.table}</strong>
+							<span>{order.products.length} itens</span>
+						</button>
+					))}
+				</OrdersContainer>
+			)}
 		</Board>
 	);
 }
