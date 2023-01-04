@@ -4,7 +4,7 @@ import { FlatList } from "react-native";
 import { Category, Icon } from "./styles";
 import { Text } from "../Text";
 
-export function Categories(){
+export default function Categories(){
 
 	const [selectedCategory, setSelectedCategory] = useState("");
 

@@ -1,5 +1,7 @@
-import { StatusBar, View } from "react-native";
+import { StatusBar } from "react-native";
 import Main from "./src/Main";
+import  "intl";
+import "intl/locale-data/jsonp/pt-BR";
 
 const App = () => {
 
