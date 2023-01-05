@@ -15,11 +15,16 @@ export default function Main(){
 	function handleSaveTable(table: string){
 		setSelectedTable(table);
 	}
+
+	function handleCancelOrder(){
+		setSelectedTable("");
+	}
+
 	return(
 		<>
 			<TableModal visible={isTableModalVisible} onClose={() => setIsTableModalVisible(false)} onSave={handleSaveTable}/>
 			<Container>
-				<Header/>
+				<Header selectedTable={selectedTable} onCancelOrder={handleCancelOrder}/>
 				<CategoriesContainer>
 					<Categories/>
 				</CategoriesContainer>
