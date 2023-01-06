@@ -9,15 +9,17 @@ import { PlusCircle } from "../Icons/PlusCircle";
 import OrderConfirmedModal from "../OrderConfirmedModal";
 import { Text } from "../Text";
 import { Item, Actions, ProductContainer, Image, QuantityContainer, ProductDetails, Sumary, TotalContainer } from "./styles";
+import api from "../../api/api";
 
 interface CartProps{
 	cartItems: CartItem[];
 	onAdd: (product: Product) => void;
 	onDecrement: (product: Product) => void;
 	onConfirmOrder: () => void;
+	selectedTable: string;
 }
 
-export default function Cart({cartItems, onAdd, onDecrement, onConfirmOrder}: CartProps){
+export default function Cart({cartItems, onAdd, onDecrement, onConfirmOrder, selectedTable}: CartProps){
 
 	const [isLoading, setIsLoading] = useState(false);
 	const [isModalVisible, setIsModalVisible] = useState(false);
@@ -26,7 +28,16 @@ export default function Cart({cartItems, onAdd, onDecrement, onConfirmOrder}: Ca
 		return acc + cartItem.quantity * cartItem.product.price;
 	}, 0);
 
-	function handleConfirmOrder(){
+	async function handleConfirmOrder(){
+		setIsLoading(true);
+		await api.post("/orders", {
+			table: selectedTable,
+			products: cartItems.map((cartItem) =>({
+				product: cartItem.product._id,
+				quantity: cartItem.quantity,
+			})),
+		});
+		setIsLoading(false);
 		setIsModalVisible(true);
 	}
 

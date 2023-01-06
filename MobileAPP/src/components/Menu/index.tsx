@@ -1,8 +1,7 @@
 import { useState } from "react";
-import { FlatList, View } from "react-native";
+import { FlatList } from "react-native";
 import { Product } from "../../types/Product";
 import formatCurrency from "../../utils/formatCurrency";
-import { Empty } from "../Icons/Empty";
 import { PlusCircle } from "../Icons/PlusCircle";
 import ProductModal from "../ProductModal";
 import { Text } from "../Text";
@@ -32,11 +31,6 @@ export default function Menu({onAddToCart, products}: MenuProps){
 				style={{marginTop: 32}}
 				contentContainerStyle={{paddingHorizontal: 24}}
 				keyExtractor={item => item._id}
-				ListEmptyComponent={
-					<View style={{alignItems: "center", justifyContent: "center", flex: 1, marginTop: "50%"}}>
-						<Empty/>
-						<Text color="#666" style={{marginTop: 24}}>Nenhum produto foi encontrado!</Text>
-					</View>}
 				ItemSeparatorComponent={Separator}
 				renderItem={({item}) =>
 					(<ProductContainer onPress={() => handleOpenModal(item)}>

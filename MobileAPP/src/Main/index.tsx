@@ -1,4 +1,6 @@
 import {useEffect, useState} from "react";
+import { Text } from "../components/Text";
+import { Empty } from "../components/Icons/Empty";
 import { Container, CategoriesContainer, Footer, MenuContainer, FooterContainer, CenteredContainer } from "./styles";
 import Header from "../components/Header";
 import Categories  from "../components/Categories";
@@ -23,6 +25,7 @@ export default function Main(){
 	const [cartItems, setCartItems] = useState<CartItem[]>([]);
 	const [products, setProducts] = useState<Product[]>([]);
 	const [categories, setCategories] = useState<CategoryIT[]>([]);
+	const [isLoadingProducts, setIsLoadingProducts] = useState(false);
 
 	useEffect(() => {
 		Promise.all([
@@ -40,8 +43,13 @@ export default function Main(){
 	async function handleSelectCategory(categoryId: string){
 		const route = !categoryId ? "/products" : `/categories/${categoryId}/products`;
 
+		setIsLoadingProducts(true);
+
+		//await new Promise<void>(resolve => setTimeout(resolve, 1000));
 		const response = await api.get(route);
 		setProducts(response.data);
+
+		setIsLoadingProducts(false);
 	}
 
 	function handleSaveTable(table: string){
@@ -110,19 +118,44 @@ export default function Main(){
 			<TableModal visible={isTableModalVisible} onClose={() => setIsTableModalVisible(false)} onSave={handleSaveTable}/>
 			<Container>
 				<Header selectedTable={selectedTable} onCancelOrder={handleResetOrder}/>
-				{!isLoading ? (
+				{isLoading ? (
+					<CenteredContainer>
+						<ActivityIndicator color={"#D73035"} size="large"/>
+					</CenteredContainer>
+				)	:
 					<>
 						<CategoriesContainer>
 							<Categories categories={categories} onSelectCategory={handleSelectCategory}/>
 						</CategoriesContainer>
-						<MenuContainer>
-							<Menu onAddToCart={handleAddToCart} products={products}/>
-						</MenuContainer>
+
+						{isLoadingProducts
+
+							?
+
+							(<CenteredContainer>
+								<ActivityIndicator color={"#D73035"} size="large"/>
+							</CenteredContainer>
+							)
+
+							: (
+								<>
+									{products.length > 0 ? (
+										<MenuContainer>
+											<Menu onAddToCart={handleAddToCart} products={products}/>
+										</MenuContainer>
+
+									)
+										:
+										<CenteredContainer>
+											<Empty/>
+											<Text color="#666" style={{marginTop: 24}}>Nenhum produto foi encontrado!</Text>
+										</CenteredContainer>
+									}
+								</>
+
+							)}
 					</>
-				) :
-					<CenteredContainer>
-						<ActivityIndicator color={"#D73035"} size="large"/>
-					</CenteredContainer>}
+				}
 			</Container>
 			<Footer>
 				<FooterContainer>
@@ -131,7 +164,7 @@ export default function Main(){
 						Novo Pedido
 					</Button>)}
 					{selectedTable && (
-						<Cart cartItems={cartItems} onAdd={handleAddToCart} onDecrement={handleDecrementCartItem} onConfirmOrder={handleResetOrder}/>
+						<Cart cartItems={cartItems} onAdd={handleAddToCart} onDecrement={handleDecrementCartItem} onConfirmOrder={handleResetOrder} selectedTable={selectedTable}/>
 					)}
 				</FooterContainer>
 			</Footer>
