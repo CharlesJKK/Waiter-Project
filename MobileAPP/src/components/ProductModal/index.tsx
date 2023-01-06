@@ -44,12 +44,28 @@ export default function ProductModal({visible, onClose, product, onAddToCart}: P
 							keyExtractor={item => item._id}
 							style={{marginTop: 16}}
 							showsVerticalScrollIndicator={false}
-							renderItem={({item}) =>(
-								<Ingredient>
-									<Text size={14} color="#666">{item.icon}</Text>
-									<Text size={14} color="#666" style={{marginLeft: 20}}>{item.name}</Text>
-								</Ingredient>
-							)}
+							renderItem={({item}) =>
+							{
+
+								function correctEmoji(){
+									if(item.icon === ":poultry_leg:"){
+										return "🍗";
+									}else if(item.icon === ":cheese:"){
+										return "🧀";
+									}else if(item.icon === ":tomato:"){
+										return "🍅";
+									}else{
+										return item.icon;
+									}
+								}
+
+								return(
+									<Ingredient>
+										<Text size={14} color="#666">{correctEmoji()}</Text>
+										<Text size={14} color="#666" style={{marginLeft: 20}}>{item.name}</Text>
+									</Ingredient>);
+							}
+							}
 						/>
 					</IngredientsContainer>
 				)}

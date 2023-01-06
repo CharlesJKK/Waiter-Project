@@ -38,8 +38,8 @@ export default function Menu({onAddToCart, products}: MenuProps){
 						<Text color="#666" style={{marginTop: 24}}>Nenhum produto foi encontrado!</Text>
 					</View>}
 				ItemSeparatorComponent={Separator}
-				renderItem={({item}) => (
-					<ProductContainer onPress={() => handleOpenModal(item)}>
+				renderItem={({item}) =>
+					(<ProductContainer onPress={() => handleOpenModal(item)}>
 						<ProductImage source={{uri: `http://192.168.18.4:3001/uploads/${item.imagePath}`}}/>
 						<ProductDetails>
 							<Text weight="Semibold">{item.name}</Text>
@@ -50,7 +50,8 @@ export default function Menu({onAddToCart, products}: MenuProps){
 							<PlusCircle />
 						</AddToCartButton>
 					</ProductContainer>
-				)}
+					)
+				}
 			/>
 		</>
 	);
