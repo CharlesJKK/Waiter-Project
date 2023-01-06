@@ -8,9 +8,15 @@ interface OrderModalProps{
 	visible: boolean;
 	order: Order | null;
 	onClose: () => void;
+	onCancelOrder: () => Promise<void>;
+	isLoading: boolean;
+	onChangeOrderStatus: () => void;
+
 }
 
-export default function OrderModal({ visible, order, onClose }:OrderModalProps){
+export default function OrderModal({ visible, order, onClose,
+	onCancelOrder, isLoading, onChangeOrderStatus }:OrderModalProps){
+
 	if(!visible || !order){
 		return null;
 	}
@@ -75,12 +81,20 @@ export default function OrderModal({ visible, order, onClose }:OrderModalProps){
 					</div>
 				</OrderDetails>
 				<Actions>
-					<button type="button" className="primary">
-						<span>👨‍🍳</span>
-						<strong>Iniciar Produção</strong>
-					</button>
-					<button type="button" className="secondary">
-						Cancelar Pedido
+					{order.status !== "DONE" && (
+						<button type="button" className="primary" disabled={isLoading} onClick={onChangeOrderStatus}>
+							<span>
+								{order.status === "WAITING" && "👨‍🍳"}
+								{order.status === "IN_PRODUCTION" && "✅"}
+							</span>
+							<strong>
+								{order.status === "WAITING" && "Iniciar produção"}
+								{order.status === "IN_PRODUCTION" && "Concluir pedido"}
+							</strong>
+						</button>
+					)}
+					<button type="button" className="secondary" onClick={onCancelOrder} disabled={isLoading} style={{color: order.status === "DONE" ? "#55cc30" : "#D73035"}}>
+						{order.status === "DONE" ? "Deletar pedido" : "Cancelar Pedido"}
 					</button>
 				</Actions>
 			</ModalBody>
